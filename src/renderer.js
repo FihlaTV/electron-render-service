@@ -78,10 +78,10 @@ export function renderWorker(window, task, done) {
 
   if (task.options.waitForText !== false) {
     var waitOperation = retry.operation({
-      retries: TIMEOUT,
+      retries: TIMEOUT - 1,
       factor: 1,
-      minTimeout: 750,
-      maxTimeout: 1000
+      minTimeout: 500,
+      maxTimeout: 500
     })
   }
   
@@ -116,6 +116,8 @@ export function renderWorker(window, task, done) {
           if (waitOperation.retry(new Error('not ready to render'))) {
             return;
           }
+
+          renderIt(task, type)
         });
 
         webContents.findInPage(task.options.waitForText);
